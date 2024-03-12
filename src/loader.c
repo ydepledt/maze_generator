@@ -15,13 +15,21 @@ Map *load_map(const char *filename) {
     }
 
     int width, height;
-    fscanf(file, "%d %d", &width, &height);
+    int err = fscanf(file, "%d %d", &width, &height);
+    if (err != 2) {
+        fprintf(stderr, "Could not read size of the maze!\n");
+        exit(EXIT_FAILURE);
+    }
 
     int *down = malloc(height * width * sizeof(int));
     int *right = malloc(height * width * sizeof(int));
 
     for (int i = 0; i < height * width; i++) {
-        fscanf(file, "%d %d", &down[i], &right[i]);
+        int err = fscanf(file, "%d %d", &down[i], &right[i]);
+        if (err != 2) {
+            fprintf(stderr, "Line %d is not syntactically correct!\n", i + 2);
+            exit(EXIT_FAILURE);
+        }
     }
 
     Map *map = create_map_weighted(width, height, height * width, height * width, down, right);

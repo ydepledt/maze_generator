@@ -166,3 +166,66 @@ void change_edge_right(Map *map, int row, int col, int right) {
     map->edges[row * map->width + col].right = right;
 }
 
+Neighbors *find_neighbors_row_col(Map *map, int row, int col) {
+    if (!validate_input(map, row, col)) {
+        return NULL;
+    }
+
+    Neighbors *neighbors = malloc(sizeof(Neighbors));
+    if (neighbors == NULL) {
+        return NULL; // Memory allocation failed
+    }
+
+    neighbors->nb = 0;
+
+    int height = map->height;
+    int width = map->width;
+
+    if (row < height - 1) {
+        neighbors->neighbors[BELOW] = (row + 1) * width + col;
+        neighbors->costs[BELOW] = map->edges[row * width + col].down;
+        neighbors->nb++;
+    }
+    else {
+        neighbors->neighbors[BELOW] = -1;
+        neighbors->costs[BELOW] = -99;
+    }
+
+    if (col < width - 1) {
+        neighbors->neighbors[RIGHT] = row * width + col + 1;
+        neighbors->costs[RIGHT] = map->edges[row * width + col].right;
+        neighbors->nb++;
+    }
+    else {
+        neighbors->neighbors[RIGHT] = -1;
+        neighbors->costs[RIGHT] = -99;
+    }
+
+    if (row > 0) {
+        neighbors->neighbors[ABOVE] = (row - 1) * width + col;
+        neighbors->costs[ABOVE] = map->edges[(row - 1) * width + col].down;
+        neighbors->nb++;
+    }
+    else {
+        neighbors->neighbors[ABOVE] = -1;
+        neighbors->costs[ABOVE] = -99;
+    }
+
+    if (col > 0) {
+        neighbors->neighbors[LEFT] = row * width + col - 1;
+        neighbors->costs[LEFT] = map->edges[row * width + col - 1].right;
+        neighbors->nb++;
+    }
+    else {
+        neighbors->neighbors[LEFT] = -1;
+        neighbors->costs[LEFT] = -99;
+    }
+
+    return neighbors;
+}
+
+Neighbors *find_neighbors(Map *map, int nb_node) {
+    int row = nb_node / map->width;
+    int col = nb_node % map->width;
+    return find_neighbors_row_col(map, row, col);
+}
