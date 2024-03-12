@@ -18,9 +18,9 @@ typedef struct {
 
 // Function prototypes
 Map *create_map(int height, int width);
-Map *create_map_weighted(int height, int width, int *down, int *right);
+Map *create_map_weighted(int width, int height, int down_size, int right_size, int *down, int *right);
 void destroy_map(Map *map);
-void print_map(Map *map);
+void print_map(Map* map, int len_padding);
 
 bool validate_input(Map *map, int row, int col);
 void change_edge_down_right(Map *map, int row, int col, int down, int right);
