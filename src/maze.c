@@ -94,7 +94,7 @@ void generate_image(Maze *maze, char *filename, int scaling_factor) {
         return;
     }
 
-    printf("Generating image...\n");
+    printf("Generating image %s...\n", filename);
 
     int width = maze->width;
     int height = maze->height;

@@ -22,8 +22,8 @@ int findMinCostNode(int* cheapest, bool* explored, int numVertices) {
 void prim(Map *map, Maze *maze) {
     
     int numVertices = map->height * map->width;
-    int *cheapest = malloc(numVertices * sizeof(int));
-    bool *explored = malloc(numVertices * sizeof(bool));
+    int *cheapest   = malloc(numVertices * sizeof(int));
+    bool *explored  = malloc(numVertices * sizeof(bool));
 
     for (int i = 0; i < numVertices; i++) {
         cheapest[i] = INFINITY;
@@ -38,15 +38,16 @@ void prim(Map *map, Maze *maze) {
     while (true) {
         int minCostNode = findMinCostNode(cheapest, explored, numVertices);
         if (minCostNode == -1) {
-            break;
+            break; // No more nodes to explore
         }
+
         explored[minCostNode] = true;
 
         find_neighbors(map, neighbors_struct, minCostNode);
 
         for (int direction = BELOW; direction <= LEFT; direction++) {
             int neighbor = neighbors_struct->neighbors[direction];
-            int cost = neighbors_struct->costs[direction];
+            int cost     = neighbors_struct->costs[direction];
 
             if (neighbor != -1 && !explored[neighbor] && cost < cheapest[neighbor]) {
                 cheapest[neighbor] = cost;

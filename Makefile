@@ -1,43 +1,49 @@
+_GUI = $(if $(NOGUI),,-D GUI -Werror)
+_DEBUG = $(if $(DEBUG),-D DEBUG,)
+_OPT = $(if $(OPT),-O3 -flto,)
 CC = gcc
-CFLAGS = -Wall -Wextra -pedantic -std=c99
-LDFLAGS =
+CFLAGS = -g -std=c99 -Wall $(_OPT) $(_GUI) $(_DEBUG) -I./include
+LDFLAGS = -lm
 
-SRCDIR = src
-INCDIR = include
-OBJDIR = obj
-BINDIR = bin
-TESTDIR = test
+.PHONY: clean check-syntax compile-all
 
-SRCFILES = $(wildcard $(SRCDIR)/*.c)
-OBJFILES = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCFILES))
-TESTFILES = $(wildcard $(TESTDIR)/test-*.c)
-TESTOBJFILES = $(patsubst $(TESTDIR)/%.c,$(OBJDIR)/%.o,$(TESTFILES))
+OBJ_DIR := obj
+BIN_DIR := bin
+SRC_DIR := src
 
-TARGET = $(BINDIR)/maze_generator
-TEST_TARGET = $(BINDIR)/test_suite
+# compile rules
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) $(CFLAGS) -o $@ -c $<
 
-.PHONY: all clean test
+$(OBJ_DIR)/%.o: ./tests/%.c
+	$(CC) $(CFLAGS) -o $@ -c $<
 
-all: $(TARGET) $(TEST_TARGET)
+# Variable for object files
+OBJECTS = $(OBJ_DIR)/map.o $(OBJ_DIR)/maze.o $(OBJ_DIR)/loader.o $(OBJ_DIR)/prim.o
 
-$(TARGET): $(OBJFILES)
-	@mkdir -p $(@D)
-	$(CC) $(LDFLAGS) $^ -o $@
+# Define targets for executables
+main: $(OBJ_DIR)/main.o $(OBJECTS)
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/main $^ $(LDFLAGS)
 
-$(TEST_TARGET): $(TESTOBJFILES) $(filter-out $(OBJDIR)/main.o,$(OBJFILES))
-	@mkdir -p $(@D)
-	$(CC) $(LDFLAGS) $^ -o $@
+app-generate-maze: $(OBJ_DIR)/app-generate-maze.o $(OBJECTS)
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/app-generate-maze $^ $(LDFLAGS)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I$(INCDIR) -c $< -o $@
+# put all your applications and tests executables as prerequisite of this rule
+compile-all: main app-generate-maze
 
-$(OBJDIR)/%.o: $(TESTDIR)/%.c
-	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -I$(INCDIR) -c $< -o $@
-
+# rule to remove all .o files and all executables
 clean:
-	rm -rf $(OBJDIR)/*.o $(BINDIR)/maze_generator $(BINDIR)/test_suite
+	-rm -rf $(OBJ_DIR)/*.o $(BIN_DIR)/*
 
-test: $(TEST_TARGET)
-	@./$(TEST_TARGET)
+# Individual rules for compiling source files
+$(OBJ_DIR)/map.o: $(SRC_DIR)/map.c 
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+$(OBJ_DIR)/maze.o: $(SRC_DIR)/maze.c
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+$(OBJ_DIR)/loader.o: $(SRC_DIR)/loader.c
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+$(OBJ_DIR)/prim.o: $(SRC_DIR)/prim.c
+	$(CC) $(CFLAGS) -o $@ -c $<
