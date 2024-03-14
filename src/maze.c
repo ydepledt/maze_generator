@@ -58,11 +58,16 @@ void print_maze(Maze *maze) {
             }
 
             else {
-                if (maze->predecessors[(i / 2) * width + ((j + 1) / 2)] == (i / 2) * width + (j / 2)) {
+
+                if (maze->predecessors[(i / 2) * width + ((j + 1) / 2)] == (i / 2) * width + (j / 2) || 
+                    maze->predecessors[(i / 2) * width + (j / 2)] == (i / 2) * width + ((j + 1) / 2)) 
+                {
                     printf("\033[47;30m-\033[0m");
                 }
 
-                else if (maze->predecessors[((i + 1) / 2) * width + (j / 2)] == (i / 2) * width + (j / 2)) {
+                else if (maze->predecessors[((i + 1) / 2) * width + (j / 2)] == (i / 2) * width + (j / 2) ||
+                         maze->predecessors[(i / 2) * width + (j / 2)] == ((i + 1) / 2) * width + (j / 2)) 
+                {
                     printf("\033[47;30m|\033[0m");
                 }
 
@@ -93,8 +98,6 @@ void generate_image(Maze *maze, char *filename, int scaling_factor) {
 
     int width = maze->width;
     int height = maze->height;
-
-    printf("Width: %d, Height: %d\n", width, height);
 
     fprintf(file, "P1\n");
     fprintf(file, "%d %d\n", (2 * width + 1) * scaling_factor, (2 * height + 1) * scaling_factor);
@@ -127,11 +130,16 @@ void generate_image(Maze *maze, char *filename, int scaling_factor) {
                     }
 
                     else {
-                        if (maze->predecessors[(i / 2) * width + ((j + 1) / 2)] == (i / 2) * width + (j / 2)) {
+
+                        if (maze->predecessors[(i / 2) * width + ((j + 1) / 2)] == (i / 2) * width + (j / 2) || 
+                            maze->predecessors[(i / 2) * width + (j / 2)] == (i / 2) * width + ((j + 1) / 2))
+                        {
                             fprintf(file, "0 ");
                         }
 
-                        else if (maze->predecessors[((i + 1) / 2) * width + (j / 2)] == (i / 2) * width + (j / 2)) {
+                        else if (maze->predecessors[((i + 1) / 2) * width + (j / 2)] == (i / 2) * width + (j / 2) ||
+                                 maze->predecessors[(i / 2) * width + (j / 2)] == ((i + 1) / 2) * width + (j / 2)) 
+                        {
                             fprintf(file, "0 ");
                         }
 

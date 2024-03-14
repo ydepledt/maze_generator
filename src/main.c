@@ -14,8 +14,7 @@ int main() {
     prim(map_ter, maze_ter);
     print_maze(maze_ter);
 
-    generate_image(maze_ter, "maze_ter.pbm", 5);
-
+    generate_image(maze_ter, "maze_ter.pbm", 10);
 
     destroy_map(map_ter);
     destroy_maze(maze_ter);

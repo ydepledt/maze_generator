@@ -164,7 +164,7 @@ void find_neighbors_row_col(Map *map, Neighbors *neighbors, int row, int col) {
     }
     else {
         neighbors->neighbors[BELOW] = -1;
-        neighbors->costs[BELOW] = 999999;
+        neighbors->costs[BELOW] = INFINITY;
     }
 
     if (col < width - 1) {
@@ -174,7 +174,7 @@ void find_neighbors_row_col(Map *map, Neighbors *neighbors, int row, int col) {
     }
     else {
         neighbors->neighbors[RIGHT] = -1;
-        neighbors->costs[RIGHT] = 999999;
+        neighbors->costs[RIGHT] = INFINITY;
     }
 
     if (row > 0) {
@@ -184,7 +184,7 @@ void find_neighbors_row_col(Map *map, Neighbors *neighbors, int row, int col) {
     }
     else {
         neighbors->neighbors[ABOVE] = -1;
-        neighbors->costs[ABOVE] = 999999;
+        neighbors->costs[ABOVE] = INFINITY;
     }
 
     if (col > 0) {
@@ -194,7 +194,7 @@ void find_neighbors_row_col(Map *map, Neighbors *neighbors, int row, int col) {
     }
     else {
         neighbors->neighbors[LEFT] = -1;
-        neighbors->costs[LEFT] = 999999;
+        neighbors->costs[LEFT] = INFINITY;
     }
 }
 

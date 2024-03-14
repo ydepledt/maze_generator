@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+#define INFINITY 999999
+
 typedef enum {
     BELOW,
     RIGHT,
