@@ -13,7 +13,7 @@ Maze *create_maze(int width, int height) {
     maze->height = height;
 
     // Allocate memory for predecessors array-like structure
-    maze->predecessors = (int*)malloc(height * width * sizeof(int));
+    maze->predecessors = malloc(height * width * sizeof(int));
     if (maze->predecessors == NULL) {
         free(maze); // Free previously allocated memory
         return NULL; // Memory allocation failed
@@ -82,60 +82,84 @@ void print_maze(Maze *maze) {
 
 }
 
-void generate_image(Maze *maze, char *filename) {
+void generate_image(Maze *maze, char *filename, int scaling_factor) {
     FILE *file = fopen(filename, "w");
     if (file == NULL) {
         printf("Error opening file\n");
         return;
     }
 
+    printf("Generating image...\n");
+
     int width = maze->width;
     int height = maze->height;
 
-    // Write a ppm file
+    printf("Width: %d, Height: %d\n", width, height);
+
     fprintf(file, "P1\n");
-    fprintf(file, "%d %d\n", 2 * width + 1, 2 * height + 1);
+    fprintf(file, "%d %d\n", (2 * width + 1) * scaling_factor, (2 * height + 1) * scaling_factor);
 
-    for (int i = 0; i < 2 * width + 1; i++) {
-        fprintf(file, "1 "); // Top border
+    for (int s1 = 0; s1 < scaling_factor; s1++) {
+        for (int i = 0; i < (2 * width + 1) * scaling_factor; i++) {
+            fprintf(file, "1 "); // Top border
+        }
+
+        fprintf(file, "\n");
     }
-
-    fprintf(file, "\n");
 
     for (int i = 0; i < 2 * (height - 1) + 1; i++) {
 
-        fprintf(file, "1 "); // Left border
+        for (int s2 = 0; s2 < scaling_factor; s2++) {
 
-        for (int j = 0; j < 2 * (width - 1) + 1; j++) {
-            if (i % 2 == 0 && j % 2 == 0) {
-                fprintf(file, "0 ");
+            for (int s3 = 0; s3 < scaling_factor; s3++) {
+                fprintf(file, "1 "); // Left border
             }
 
-            else if (i % 2 != 0 && j % 2 != 0) {
-                fprintf(file, "1 ");
+            for (int j = 0; j < 2 * (width - 1) + 1; j++) {
+
+                for (int s4 = 0; s4 < scaling_factor; s4++) {
+                    if (i % 2 == 0 && j % 2 == 0) {
+                        fprintf(file, "0 ");
+                    }
+
+                    else if (i % 2 != 0 && j % 2 != 0) {
+                        fprintf(file, "1 ");
+                    }
+
+                    else {
+                        if (maze->predecessors[(i / 2) * width + ((j + 1) / 2)] == (i / 2) * width + (j / 2)) {
+                            fprintf(file, "0 ");
+                        }
+
+                        else if (maze->predecessors[((i + 1) / 2) * width + (j / 2)] == (i / 2) * width + (j / 2)) {
+                            fprintf(file, "0 ");
+                        }
+
+                        else {
+                            fprintf(file, "1 ");
+                        }
+                    }
+                }
+            }
+            
+            for (int s5 = 0; s5 < scaling_factor; s5++) {
+                fprintf(file, "1 "); // Right border
             }
 
-            else {
-                if (maze->predecessors[(i / 2) * width + ((j + 1) / 2)] == (i / 2) * width + (j / 2)) {
-                    fprintf(file, "0 ");
-                }
-
-                else if (maze->predecessors[((i + 1) / 2) * width + (j / 2)] == (i / 2) * width + (j / 2)) {
-                    fprintf(file, "0 ");
-                }
-
-                else {
-                    fprintf(file, "1 ");
-                }
-            }
+            fprintf(file, "\n");
         }
-        
-        fprintf(file, "1 \n");
     }
 
-    for (int i = 0; i < 2 * width + 1; i++) {
-        fprintf(file, "1 "); // Bottom border
+    for (int s6 = 0; s6 < scaling_factor; s6++) {
+        for (int i = 0; i < (2 * width + 1) * scaling_factor; i++) {
+            fprintf(file, "1 "); // Bottom border
+        }
+
+        fprintf(file, "\n");
     }
 
-    fprintf(file, "\n");
+    printf("Image generated successfully\n");
+
+    fclose(file);
 }
+

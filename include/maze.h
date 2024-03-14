@@ -16,6 +16,6 @@ Maze *create_maze(int width, int height);
 void destroy_maze(Maze *maze);
 
 void print_maze(Maze *maze);
-void generate_image(Maze *maze, char *filename);
+void generate_image(Maze *maze, char *filename, int scaling_factor);
 
 #endif /* MAZE_H */

@@ -41,7 +41,7 @@ Map *create_map_weighted(int width, int height, int down_size, int right_size, i
     map->height = height;
 
     // Allocate memory for edges array-like structure
-    map->edges = (Edges*)malloc(height * width * sizeof(Edges));
+    map->edges = malloc(height * width * sizeof(Edges));
     if (map->edges == NULL) {
         free(map); // Free previously allocated memory
         return NULL; // Memory allocation failed
@@ -81,12 +81,7 @@ void destroy_map(Map *map) {
     }
 }
 
-void print_map(Map* map, int len_padding) {
-    if (len_padding < 4) {
-        printf("Padding length must be at least 4.\nDefault to 10\n");
-        len_padding = 10;
-    }
-
+void print_map(Map* map) {
     if (map == NULL) {
         printf("Map is not initialized.\n");
         return;
@@ -99,21 +94,7 @@ void print_map(Map* map, int len_padding) {
     printf("Map:\n");
     for (int i = 0; i < map->height; i++) {
         for (int j = 0; j < map->width; j++) {
-
-            char *str_print = NULL;
-            int ret = snprintf(NULL, 0, "(%d, %d)", map->edges[i * map->width + j].down, map->edges[i * map->width + j].right);
-            if (ret >= 0) {
-                str_print = malloc(ret + 1); // Allocate space for the string and null terminator
-                if (str_print != NULL) {
-                    snprintf(str_print, ret + 1, "(%d, %d)", map->edges[i * map->width + j].down, map->edges[i * map->width + j].right);
-                    int len_str = strlen(str_print);
-                    printf("%s ", str_print);
-                    for (int k = 0; k < len_padding - len_str; k++) {
-                        printf(" ");
-                    }
-                    free(str_print);
-                }
-            }
+            printf("(%d, %d) ", map->edges[i * map->width + j].down, map->edges[i * map->width + j].right);
         }
         printf("\n");
     }
@@ -166,14 +147,9 @@ void change_edge_right(Map *map, int row, int col, int right) {
     map->edges[row * map->width + col].right = right;
 }
 
-Neighbors *find_neighbors_row_col(Map *map, int row, int col) {
+void find_neighbors_row_col(Map *map, Neighbors *neighbors, int row, int col) {
     if (!validate_input(map, row, col)) {
-        return NULL;
-    }
-
-    Neighbors *neighbors = malloc(sizeof(Neighbors));
-    if (neighbors == NULL) {
-        return NULL; // Memory allocation failed
+        return;
     }
 
     neighbors->nb = 0;
@@ -188,7 +164,7 @@ Neighbors *find_neighbors_row_col(Map *map, int row, int col) {
     }
     else {
         neighbors->neighbors[BELOW] = -1;
-        neighbors->costs[BELOW] = -99;
+        neighbors->costs[BELOW] = 999999;
     }
 
     if (col < width - 1) {
@@ -198,7 +174,7 @@ Neighbors *find_neighbors_row_col(Map *map, int row, int col) {
     }
     else {
         neighbors->neighbors[RIGHT] = -1;
-        neighbors->costs[RIGHT] = -99;
+        neighbors->costs[RIGHT] = 999999;
     }
 
     if (row > 0) {
@@ -208,7 +184,7 @@ Neighbors *find_neighbors_row_col(Map *map, int row, int col) {
     }
     else {
         neighbors->neighbors[ABOVE] = -1;
-        neighbors->costs[ABOVE] = -99;
+        neighbors->costs[ABOVE] = 999999;
     }
 
     if (col > 0) {
@@ -218,14 +194,12 @@ Neighbors *find_neighbors_row_col(Map *map, int row, int col) {
     }
     else {
         neighbors->neighbors[LEFT] = -1;
-        neighbors->costs[LEFT] = -99;
+        neighbors->costs[LEFT] = 999999;
     }
-
-    return neighbors;
 }
 
-Neighbors *find_neighbors(Map *map, int nb_node) {
+void find_neighbors(Map *map, Neighbors *neighbors, int nb_node) {
     int row = nb_node / map->width;
     int col = nb_node % map->width;
-    return find_neighbors_row_col(map, row, col);
+    find_neighbors_row_col(map, neighbors, row, col);
 }

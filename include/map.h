@@ -34,15 +34,15 @@ typedef struct {
 Map *create_map(int height, int width);
 Map *create_map_weighted(int width, int height, int down_size, int right_size, int *down, int *right);
 void destroy_map(Map *map);
-void print_map(Map* map, int len_padding);
+void print_map(Map* map);
 
 bool validate_input(Map *map, int row, int col);
 void change_edge_down_right(Map *map, int row, int col, int down, int right);
 void change_edge_down(Map *map, int row, int col, int down);
 void change_edge_right(Map *map, int row, int col, int right);
 
-Neighbors *find_neighbors(Map *map, int nb_node);
-Neighbors *find_neighbors_row_col(Map *map, int row, int col);
+void find_neighbors(Map *map, Neighbors *neighbors, int nb_node);
+void find_neighbors_row_col(Map *map, Neighbors *neighbors, int row, int col);
 
 
 

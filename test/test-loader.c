@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
                     // Print an error message
                     fprintf(stderr, "Error: Could not load map %s.\n", ent->d_name);
                 } else {
-                    print_map(map, 10);
+                    print_map(map);
                     destroy_map(map);
                     printf("\n");
                 }
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
             exit(EXIT_FAILURE);
         }
 
-        print_map(map, 10);
+        print_map(map);
 
         destroy_map(map);
     }
