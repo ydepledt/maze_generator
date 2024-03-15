@@ -35,6 +35,7 @@ typedef struct {
 // Function prototypes
 Map *create_map(int height, int width);
 Map *create_map_weighted(int width, int height, int down_size, int right_size, int *down, int *right);
+Map *create_random_map(int height, int width, int min_weight, int max_weight);
 void destroy_map(Map *map);
 void print_map(Map* map);
 

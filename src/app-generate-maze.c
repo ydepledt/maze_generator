@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
 
     Map *map = load_map(argv[1]);
     if (map == NULL) {
+        printf("Error: Could not load map.\n");
         return EXIT_FAILURE;
     }
 
@@ -21,6 +22,7 @@ int main(int argc, char *argv[]) {
 
     Maze *maze = create_maze(width, height);
     if (maze == NULL) {
+        printf("Error: Could not create maze.\n");
         destroy_map(map);
         return EXIT_FAILURE;
     }

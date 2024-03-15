@@ -8,6 +8,7 @@ Map *create_map(int width, int height) {
     // Allocate memory for map struct
     Map *map = malloc(sizeof(Map));
     if (map == NULL) {
+        printf("Memory allocation failed.\n");
         return NULL; // Memory allocation failed
     }
 
@@ -17,6 +18,7 @@ Map *create_map(int width, int height) {
     // Allocate memory for edges array-like structure
     map->edges = (Edges*)malloc(height * width * sizeof(Edges));
     if (map->edges == NULL) {
+        printf("Memory allocation failed.\n");
         free(map); // Free previously allocated memory
         return NULL; // Memory allocation failed
     }
@@ -34,6 +36,7 @@ Map *create_map_weighted(int width, int height, int down_size, int right_size, i
     // Allocate memory for map struct
     Map *map = malloc(sizeof(Map));
     if (map == NULL) {
+        printf("Memory allocation failed.\n");
         return NULL; // Memory allocation failed
     }
 
@@ -43,6 +46,7 @@ Map *create_map_weighted(int width, int height, int down_size, int right_size, i
     // Allocate memory for edges array-like structure
     map->edges = malloc(height * width * sizeof(Edges));
     if (map->edges == NULL) {
+        printf("Memory allocation failed.\n");
         free(map); // Free previously allocated memory
         return NULL; // Memory allocation failed
     }
@@ -70,6 +74,34 @@ Map *create_map_weighted(int width, int height, int down_size, int right_size, i
     }
 
     return map;
+}
+
+Map *create_random_map(int height, int width, int min_weight, int max_weight) {
+    // Allocate memory for map struct
+    Map *map = malloc(sizeof(Map));
+    if (map == NULL) {
+        printf("Memory allocation failed.\n");
+        return NULL; // Memory allocation failed
+    }
+
+    map->width = width;
+    map->height = height;
+
+    // Allocate memory for edges array-like structure
+    map->edges = malloc(height * width * sizeof(Edges));
+    if (map->edges == NULL) {
+        free(map); // Free previously allocated memory
+        return NULL; // Memory allocation failed
+    }
+
+    // Initialize edges with random values
+    for (int i = 0; i < height * width; i++) {
+        map->edges[i].down  = rand() % (max_weight - min_weight + 1) + min_weight;
+        map->edges[i].right = rand() % (max_weight - min_weight + 1) + min_weight;
+    }
+
+    return map;
+
 }
 
 void destroy_map(Map *map) {
@@ -155,7 +187,7 @@ void find_neighbors_row_col(Map *map, Neighbors *neighbors, int row, int col) {
     neighbors->nb = 0;
 
     int height = map->height;
-    int width = map->width;
+    int width  = map->width;
 
     if (row < height - 1) {
         neighbors->neighbors[BELOW] = (row + 1) * width + col;
