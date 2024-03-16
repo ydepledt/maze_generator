@@ -1,6 +1,6 @@
 # Maze Generator
 
-A maze generator is a program that creates mazes from "map" files. You can calso create random "map" files.
+A maze generator is a program that creates mazes from "map" files. You can also create random "map" files.
 
 ## Table of Contents
 
