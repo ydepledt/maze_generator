@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 #include "map.h"
 
 Map *create_map(int width, int height) {
@@ -77,6 +78,9 @@ Map *create_map_weighted(int width, int height, int down_size, int right_size, i
 }
 
 Map *create_random_map(int height, int width, int min_weight, int max_weight) {
+    // Initialize random number generator
+    srand(time(NULL));
+
     // Allocate memory for map struct
     Map *map = malloc(sizeof(Map));
     if (map == NULL) {

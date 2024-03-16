@@ -24,6 +24,8 @@ Maze *create_maze(int width, int height) {
         maze->predecessors[i] = -1;
     }
 
+    maze->cost = 0;
+
     return maze;
 }
 

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include "map.h"
 #include "writer.h"
 
@@ -9,7 +10,7 @@ void write_map(Map *map, const char *subfix) {
     int height = map->height;
 
     char filename[100];
-    if (subfix == NULL) {
+    if (strcmp(subfix, "") == 0) {
         sprintf(filename, "data_map/map_%d_%d.txt", width, height);
     } 
     else {

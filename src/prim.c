@@ -57,6 +57,10 @@ void prim(Map *map, Maze *maze) {
 
     }
 
+    for (int i = 0; i < numVertices; i++) {
+            maze->cost += cheapest[i];
+    }
+
     free(neighbors_struct);
     free(cheapest);
     free(explored);
