@@ -31,9 +31,7 @@ A maze generator is a program that creates mazes from "map" files. You can also 
 
 You can clean all obj and bin with:
 
-    ```bash
     make clean
-    ```
 
 ## Structure
 
@@ -42,19 +40,23 @@ The "map" files have the following structure:
     • the other lines contains the edges cost for each node of the map (first value for “down” direction, then for “right” direction)
 
 Example:
-    2 2
-    -5 6
-    -1 3
-    1 3
-    -15 15
+```
+2 2
+-5 6
+-1 3
+11 3
+-15 15
+```
 
 ## Usage
 
 To generate a maze (print and pbm image) from a map file, you can run the command:
-    - ./bin/app-generate-maze filepath scaling_factor_image
+
+    ./bin/app-generate-maze filepath scaling_factor_image
 
 To generate a random map (map file within data_map folder), you can run the following command:
-    - ./bin/app-generate-random-map width height file_subfix
+
+    ./bin/app-generate-random-map width height file_subfix
 
 ## Todo
 
