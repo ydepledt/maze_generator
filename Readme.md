@@ -36,8 +36,9 @@ You can clean all obj and bin with:
 ## Structure
 
 The "map" files have the following structure:
-    • the first line contains the width and the height of the map separated by a space
-    • the other lines contains the edges cost for each node of the map (first value for “down” direction, then for “right” direction)
+
+- The first line contains the width and height of the map separated by a space.
+- The subsequent lines contain the edge costs for each node of the map. Each line corresponds to a node, with values separated by spaces. The first value represents the "down" direction, and the second value represents the "right" direction.
 
 Example:
 ```
